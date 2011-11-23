@@ -187,6 +187,7 @@ app.post('/jenkins_pbh', ipWhitelist, (req, res) ->
     req.on('end', () ->
       post = JSON.parse(body)
       return unless post.build.phase == 'FINISHED'
+      post.name = helpers.discretify(post.name, settings.discretionList)
       j = new Jenkins(post)
       j.on('data', (data) -> io.sockets.emit('jenkins', data))
       return
