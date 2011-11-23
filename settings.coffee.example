@@ -1,0 +1,12 @@
+exports.auth =
+  user: ''        # Basic HTTP Auth username
+  pass: ''        # Basic HTTP Auth password
+
+exports.jenkins =
+  enabled: false  # Enable authorisation?
+  ip: ''          # Your Jenkins box IP
+
+exports.lastfm =
+  apiKey: ''      # Your Last.fm API key
+  user: ''        # The Last.fm username you want to follow
+  enabled: false  # Show currently listening

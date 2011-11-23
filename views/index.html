@@ -1,0 +1,26 @@
+<div class="fail-wrapper message-wrapper">
+  <h2 class="fail-message"></h2>
+</div>
+
+<div class="now-playing hidden">
+  <marquee scrollamount="4"></marquee>
+</div>
+
+<div id="wrapper">
+{{partial "commits"}}
+</div>
+
+</div>
+
+<script>
+  if(!window.App){ window.App = {}; }
+  window.App.JenkinsBootstrap = [
+    {{each(i, status) statuses}}
+      {
+        project: "${project}",
+        status: "${status}"
+      },
+    {{/each}}
+	]
+	window.App.songsEnabled = ${songsEnabled};
+</script>

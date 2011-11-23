@@ -1,0 +1,14 @@
+{{each(i, commit) commits}}
+  <div class="commit">
+    <blockquote class="message">
+      <img src="${image}" />
+      <p>${commit.message}</p>
+      <footer>
+        <p>
+          ${commit.project} - ${commit.author}
+          <span class="time" data-time-stamp="${commit.timestamp}"> - ${moment(commit.timestamp).fromNow()}</span>
+        </p>
+      </footer>
+    </blockquote>
+  </div>
+{{/each}}

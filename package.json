@@ -1,0 +1,17 @@
+{
+  "name": "mint-source",
+  "version": "0.1.0",
+  "dependencies": {
+    "coffee-script":"latest",
+    "express":"2.5.0",
+    "connect":"1.7.2",
+    "qs":"0.3.2",
+    "async":"0.1.15",
+    "jqtpl":"1.0.7",
+    "redis":"0.6.7",
+    "socket.io":"0.8.6",
+    "moment":"1.1.1",
+    "gravatar":"1.0.3"
+  }
+}
+

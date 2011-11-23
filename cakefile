@@ -1,0 +1,7 @@
+{exec} = require 'child_process'
+
+# Should never need this as everything is compiled on the fly...
+task 'compile', 'Compile CoffeeScript into JavaScipt', (options) ->
+  exec 'coffee --compile --output compiled/ .', (err, stdout, stderr) ->
+    throw err if err
+    console.log stdout + stderr
