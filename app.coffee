@@ -21,6 +21,7 @@ io  = require('socket.io').listen(app)
 app.configure( ()->
   app.set('views', __dirname + '/views')
   app.set('view engine', 'html')
+  app.set('view cache', false)
   app.register('.html', require('jqtpl').express)
   app.use(app.router)
   app.use(express.static(__dirname + '/public'))
