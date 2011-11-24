@@ -7,7 +7,7 @@ moment   = require('moment')
 gravatar = require('gravatar')
 helpers  = require('./helpers/helpers')
 
-if process.env == 'production'
+if process.env.NODE_ENV == 'production'
   settings = require('./settings-heroku.coffee')
 else
   settings = require('./settings.coffee')
