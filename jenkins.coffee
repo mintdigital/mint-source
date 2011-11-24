@@ -2,16 +2,11 @@ util   = require('util')
 events = require('events')
 https  = require('https')
 url    = require('url')
-if process.env.REDISTOGO_URL
-  rtg   = url.parse(process.env.REDISTOGO_URL)
-  redis = require('redis').createClient(rtg.port, rtg.hostname)
-  redis.auth(rtg.auth.split(":")[1])
-else
-  redis = require('redis').createClient()
 
 class Jenkins extends events.EventEmitter
-  constructor: (data) ->
+  constructor: (data, redisClient) ->
     events.EventEmitter.call(this)
+    @redis = redisClient
     @project = data.name
     @status = data.build.status
 
@@ -21,12 +16,12 @@ class Jenkins extends events.EventEmitter
     prevStatus = ''
 
     statusLogic = =>
-      redis.hset('Jenkins', @project, @status)
       @status = 'RECENT FAILURE' if prevStatus == 'FAILURE' and @status == 'SUCCESS'
+      @redis.hset('Jenkins', @project, @status)
       @sendOutput()
 
-    if redis.hexists('Jenkins', @project)
-      redis.hget('Jenkins', @project, (err, result) ->
+    if @redis.hexists('Jenkins', @project)
+      @redis.hget('Jenkins', @project, (err, result) ->
         prevStatus = result
         statusLogic()
       )
