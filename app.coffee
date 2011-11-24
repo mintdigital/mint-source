@@ -7,6 +7,7 @@ async       = require('async')
 moment      = require('moment')
 gravatar    = require('gravatar')
 template    = require('jqtpl')
+Github      = require('./github')
 Jenkins     = require('./jenkins')
 Lastfm      = require('./lastfm')
 helpers     = require('./helpers/helpers')
@@ -132,41 +133,10 @@ app.post('/github_prh', basicAuth, (req, res) ->
   # Remember to post to http://user:password@your-app/github_prh
   # if using basic auth - https://github.com/blog/237-basic-auth-post-receives
   body = ''
-
-  req.on('data', (data) ->
-    body += data
-  )
-
+  req.on('data', (data) -> body += data )
   req.on('end', () ->
-    payload = JSON.parse(qs.parse(body).payload)
-    commits = payload.commits
-    project = helpers.discretify(payload.repository.name, settings.discretionList)
-    out = []
-    for commit in commits
-      data =
-        message: commit.message
-        project: project
-        timestamp: commit.timestamp
-        author: commit.author.name
-        image: gravatar.url(commit.author.email, {s:120})
-      data.relTime = moment(data.timestamp).fromNow()
-      out.push(data)
-
-    async.sortBy(out, (commit, callback) ->
-      callback(null, 1 / Date.parse(commit.timestamp))
-    ,(err, results) ->
-      out = results
-    )
-
-    for commit in out
-      redis.lpush('Commits', JSON.stringify(commit))
-
-    redis.ltrim('Commits', 0, 5)
-
-    fs.readFile('./views/_commit.html', 'utf-8', (err, rawTemplate) ->
-      io.sockets.emit('message', template.tmpl(rawTemplate, out))
-    )
-
+    g = new Github(body, redis)
+    g.on('message', (data) -> io.sockets.emit('message', data))
     res.writeHead(200, {'Content-Type': 'text/html'})
     res.end('OK')
   )
