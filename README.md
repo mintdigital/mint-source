@@ -44,6 +44,21 @@ Deploy to Heroku
   - `heroku config:add LASTFM_KEY=apikey` => your Last.fm api key
   - `heroku config:add LASTFM_USER=username` => the Last.fm account you'd like to track
 
+Set up Github Post Receive Hooks
+---------------
+
+1. Visit https://github.com/{username}/{project}/admin/hooks and choose post receive URLs from the list.
+2. Enter http://{appname}.herokuapp.com/github_prh into the URL field and save.
+NB. If you have enabled HTTP auth on your Mint Source site the post receive hook URL should be in the format: `http://{user}:{password}@{appname}.herokuapp.com/github_prh`
+
+Set up Jenkins Post Build Hooks
+---------------
+
+If you run the Jenkins CI server, mint source can also display build status.
+
+1. Install the [Jenkins Notification](https://wiki.jenkins-ci.org/display/JENKINS/Notification+Plugin) plugin.
+2. Visit http://{your-ci-box}/job/project-name/configure and click 'Add Endpoint' in the Job Notifications section. Enter http://{appname}.herokuapp.com/jenkins_pbh and hit save.
+
 Wait, I have NDA projects which I can't display on my status board!
 ---------------
 
