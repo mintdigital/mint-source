@@ -5,8 +5,10 @@
       <p>${commit.message}</p>
       <footer>
         <p>
-          ${commit.project} - ${commit.author}
-          <span class="time" data-time-stamp="${commit.timestamp}"> - ${moment(commit.timestamp).fromNow()}</span>
+          ${commit.project} - ${commit.author} -
+          <span class="time" data-timestamp="${commit.timestamp}">
+            ${moment(commit.timestamp).fromNow()}
+          </span>
         </p>
       </footer>
     </blockquote>

@@ -4,19 +4,17 @@ $ () ->
   socket = io.connect window.location.origin
 
   setDates = () ->
-    moment.lang('fr')
-    $(".commit").each((index, elm) ->
-      timeElm = $(".message .time", elm)
-      timeElm.html(moment(timeElm.attr("data-time-stamp")).fromNow())
-    )
-  setDates();
+    $('.commit .time').each (i, elem) ->
+      $elem     = $(elem)
+      timestamp = $elem.data 'timestamp'
+      $elem.text moment(timestamp).fromNow()
+
+  window.setInterval setDates, 60e3
 
   socket.on 'connect', ->
     App.Health().init(socket)
 
     socket.on 'message', (commit) ->
-      timeElm = $(".message .time", commit)
-      timeElm.html(moment(timeElm.attr("data-time-stamp")).fromNow())
       $('#wrapper').prepend(commit)
       $('#wrapper .commit:gt(9)').remove()
 
