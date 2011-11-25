@@ -87,13 +87,9 @@ ipWhitelist = (req, res, next) ->
 # Routes
 
 app.get('/javascripts/:resource.js', (req, res) ->
-  # Compile and serve client side CoffeeScript on the fly
-  filePath = "./public/javascripts/#{req.params.resource}.coffee"
-  fs.readFile(filePath, 'utf-8', (err, data) ->
-    res.writeHead(200, {'Content-Type': 'application/javascript'})
-    res.write(coffee.compile(data))
-    res.end()
-  )
+  resource = req.params.resource
+  helpers.compile resource, (compiled) ->
+    res.contentType('application/javascript').send(compiled)
 )
 
 app.get('/', basicAuth, (req, res) ->
