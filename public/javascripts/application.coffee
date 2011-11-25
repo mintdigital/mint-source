@@ -1,7 +1,7 @@
 window.App = {} unless window.App
 
 $ () ->
-  socket = io.connect window.location.origin
+  App.socket = io.connect window.location.origin
 
   setDates = () ->
     $('.commit .time').each (i, elem) ->
@@ -11,15 +11,15 @@ $ () ->
 
   window.setInterval setDates, 60e3
 
-  socket.on 'connect', ->
-    App.Health().init(socket)
+  App.socket.on 'connect', ->
+    App.Health().init()
 
-    socket.on 'message', (commit) ->
+    App.socket.on 'message', (commit) ->
       $('#wrapper').prepend(commit)
       $('#wrapper .commit:gt(9)').remove()
 
     if App.songsEnabled
-      App.Songs.init(socket)
+      App.Songs.init()
 
   reloadCSS = () ->
     `var h,a,f,g;a=window.document.getElementsByTagName('link');for(h=0;h<a.length;h++){f=a[h];if(f.rel.toLowerCase().match(/stylesheet/)&&f.href){g=f.href.replace(/(&|\?)forceReload=\d+/,'');f.href=g+(g.match(/\?/)?'&':'?')+'forceReload='+(new Date().valueOf());}}`

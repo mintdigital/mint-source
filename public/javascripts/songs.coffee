@@ -4,19 +4,18 @@
 window.App = {} unless window.App
 
 App.Songs =
-  init: (socketObject) ->
+  init: () ->
     $('div.now-playing').removeClass('hidden')
     @$nowPlaying = $ 'div.now-playing marquee'
-    @socket = socketObject
 
     @parseResponse(false)
     @listen()
 
   listen: ->
-    @socket.on 'lastfm', (msg) => @parseResponse(msg)
+    App.socket.on 'lastfm', (msg) => @parseResponse(msg)
 
   stopListening: () ->
-    @socket.off 'lastfm'
+    App.socket.off 'lastfm'
 
   parseResponse: (msg) ->
     if msg[0]

@@ -6,24 +6,23 @@ window.App = {} unless window.App
 App.Health = () ->
   _cache = {}
   Health =
-    init: (socketObject) ->
+    init: () ->
       @$body          = $('body')
       @$failWrapper   = $('.fail-wrapper')
       @$failText      = @$failWrapper.find('.fail-message')
-      @socket         = socketObject
 
       @bootstrap() if App.JenkinsBootstrap.length > 0
       @listen()
 
     listen: () ->
-      @socket.on 'jenkins', (msg) => @parseMessage(msg)
+      App.socket.on 'jenkins', (msg) => @parseMessage(msg)
 
     bootstrap: () ->
       for status in App.JenkinsBootstrap
         @parseMessage(status)
 
     stopListening: () ->
-      @socket.off 'jenkins'
+      App.socket.off 'jenkins'
 
     get: (project) ->
       _cache[project]
