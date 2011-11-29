@@ -57,14 +57,11 @@ app.helpers({
 # get discretionList from Redis
 settings.discretionList = []
 getDiscretionList = (listName) ->
-  redis.llen(listName, (err, i) ->
-    redis.lrange(listName, 0, i, (err, replies) ->
-      for reply in replies
-        settings.discretionList.push(JSON.parse(reply))
-    )
-  )
-getDiscretionList('Discretions')
+  redis.lrange listName, 0, -1, (err, replies) ->
+    for reply in replies
+      settings.discretionList.push(JSON.parse(reply))
 
+getDiscretionList 'Discretions'
 
 # Middleware functions
 
