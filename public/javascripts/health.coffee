@@ -22,7 +22,7 @@ App.Health = () ->
         @parseMessage(status)
 
     stopListening: () ->
-      App.socket.off 'jenkins'
+      App.socket.removeAllListeners 'jenkins'
 
     get: (project) ->
       _cache[project]
