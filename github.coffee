@@ -24,7 +24,7 @@ class Github extends events.EventEmitter
     branch = @payload.ref.replace('refs/heads/', '')
     for commit in @payload.commits
       data =
-        message:   commit.message
+        message:   commit.message.split("\n")[0]
         timestamp: commit.timestamp
         author:    commit.author.name
         project:   project
