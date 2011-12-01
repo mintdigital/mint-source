@@ -47,7 +47,7 @@ class Github extends events.EventEmitter
     @redis.ltrim('Commits', 0, 5)
 
   render: () ->
-    fs.readFile('./views/_commit.html', 'utf-8', (err, rawTemplate) =>
+    fs.readFile('./views/_message.html', 'utf-8', (err, rawTemplate) =>
       @emit('message', template.tmpl(rawTemplate, @commits))
     )
 

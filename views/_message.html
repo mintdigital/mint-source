@@ -4,7 +4,8 @@
     <p>${message}</p>
     <footer>
       <p>
-        ${project} - ${author}
+        ${project} -
+        {{if author}} ${author} -{{/if}}
         <span class="time"> - ${relTime}</span>
       </p>
     </footer>

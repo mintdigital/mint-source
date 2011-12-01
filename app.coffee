@@ -10,6 +10,7 @@ template    = require('jqtpl')
 Github      = require('./github')
 Jenkins     = require('./jenkins')
 Lastfm      = require('./lastfm')
+EndPoint    = require('./endpoint')
 helpers     = require('./helpers/helpers')
 settings = {}
 redis    = {}
@@ -159,6 +160,18 @@ app.post('/jenkins_pbh', ipWhitelist, (req, res) ->
     res.writeHead(200, {'Content-Type': 'text/html'})
     res.end('OK')
 )
+
+app.post '/endpoint', (req,res) ->
+  # Generic endpoint, send JSON here, show it on the status board
+  body = ''
+  req.on 'data', (data) -> body += data
+  req.on 'end', ->
+    post = JSON.parse(body)
+    e = new EndPoint(post, redis)
+    e.on('data', (data) -> io.sockets.emit('endpoint', data))
+    return
+    res.writeHead 200, {'Content-Type': 'text/html'}
+    res.end 'OK'
 
 if settings.lastfm.enabled
   lfm = new Lastfm({

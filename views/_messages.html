@@ -5,7 +5,8 @@
       <p>${commit.message}</p>
       <footer>
         <p>
-          ${commit.project} - ${commit.author} -
+          ${commit.project} -
+          {{if commit.author}} ${commit.author} -{{/if}}
           <span class="time" data-timestamp="${commit.timestamp}">
             ${moment(commit.timestamp).fromNow()}
           </span>
