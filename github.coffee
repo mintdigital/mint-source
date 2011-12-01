@@ -20,7 +20,6 @@ class Github extends events.EventEmitter
     @build()
 
   build: () ->
-    console.log('your payload is now', @payload)
     project = helpers.discretify(@payload.repository.name, settings.discretionList)
     branch = @payload.ref.replace('refs/heads/', '')
     for commit in @payload.commits
