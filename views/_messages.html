@@ -1,14 +1,13 @@
-{{each(i, commit) commits}}
+{{each(i, message) messages}}
   <div class="commit">
     <blockquote class="message">
       <img src="${image}" />
-      <p>${commit.message}</p>
+      <p>${message.message}</p>
       <footer>
         <p>
-          ${commit.project} -
-          {{if commit.author}} ${commit.author} -{{/if}}
-          <span class="time" data-timestamp="${commit.timestamp}">
-            ${moment(commit.timestamp).fromNow()}
+          ${message.submessage}
+          <span class="time" data-timestamp="${message.timestamp}">
+            ${moment(message.timestamp).fromNow()}
           </span>
         </p>
       </footer>

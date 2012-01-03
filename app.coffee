@@ -91,7 +91,7 @@ app.get('/javascripts/:resource.js', (req, res) ->
 )
 
 app.get('/', basicAuth, (req, res) ->
-  commits  = []
+  messages = []
   statuses = []
   getStatuses = ->
     redis.hgetall('Jenkins', (err, replies) ->
@@ -100,24 +100,25 @@ app.get('/', basicAuth, (req, res) ->
         if status != 'SUCCESS'
           statuses.push({project: project, status: status})
       res.header('Cache-Control', 'no-cache')
+      console.log(messages)
       res.render('index', {
         title: 'Mint Source',
-        commits: commits,
+        messages: messages,
         statuses: statuses,
         songsEnabled: settings.lastfm.enabled
       })
     )
   app.emit 'pageload'
-  redis.lrange('Commits', 0, 5, (err, replies) ->
+  redis.lrange('Messages', 0, 5, (err, replies) ->
     for reply in replies
       reply = JSON.parse(reply)
       reply.project = helpers.discretify(reply.project, settings.discretionList)
-      commits.push(reply)
+      messages.push(reply)
 
-    async.sortBy(commits, (commit, callback) ->
-      callback(null, 1 / Date.parse(commit.timestamp))
+    async.sortBy(messages, (message, callback) ->
+      callback(null, 1 / Date.parse(message.timestamp))
     ,(err, results) ->
-      commits = results
+      messages = results
       getStatuses()
     )
   )
@@ -168,8 +169,7 @@ app.post '/endpoint', (req,res) ->
   req.on 'end', ->
     post = JSON.parse(body)
     e = new EndPoint(post, redis)
-    e.on('data', (data) -> io.sockets.emit('endpoint', data))
-    return
+    e.on('data', (data) -> io.sockets.emit('message', data))
     res.writeHead 200, {'Content-Type': 'text/html'}
     res.end 'OK'
 

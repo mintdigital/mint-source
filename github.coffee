@@ -23,12 +23,11 @@ class Github extends events.EventEmitter
     project = helpers.discretify(@payload.repository.name, settings.discretionList)
     for commit in @payload.commits
       data =
-        message:   commit.message
-        timestamp: commit.timestamp
-        author:    commit.author.name
-        project:   project
-        image:     gravatar.url(commit.author.email, {s:120})
-        relTime:   moment(commit.timestamp).fromNow()
+        message:    commit.message
+        submessage: "#{project} - #{commit.author.name}"
+        timestamp:  commit.timestamp
+        image:      gravatar.url(commit.author.email, {s:120})
+        relTime:    moment(commit.timestamp).fromNow()
       @commits.push(data)
     @sort()
 
@@ -43,8 +42,8 @@ class Github extends events.EventEmitter
 
   updateRedis: () ->
     for commit in @commits
-      @redis.lpush('Commits', JSON.stringify(commit))
-    @redis.ltrim('Commits', 0, 5)
+      @redis.lpush('Messages', JSON.stringify(commit))
+    @redis.ltrim('Messages', 0, 5)
 
   render: () ->
     fs.readFile('./views/_message.html', 'utf-8', (err, rawTemplate) =>
