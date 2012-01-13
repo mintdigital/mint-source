@@ -66,6 +66,19 @@ We totally have your back, substitute sensitive names by adding them to Redis (t
 
     LPUSH Discretions "{\"orig\":\"secret-name\",\"subs\":\"public-name\"}"
 
+Send your own data
+---------------
+Mint Source accepts data from any source. Display a notification every time your awesome app gets a new user! Just configure your app to make a POST request to `http://{appname}.herokuapp.com/endpoint` with the following JSON in the body:
+
+    {
+      "message": "Message body",         // <String>: Required - the main text to be displayed.
+      "submessage": "submessage",        // <String>: Required - small lower message
+      "timestamp": "2012-01-01T00:00:00",// <String>: Optional - will use the time the post was recieved if not specified. Expects a UTC string.
+      "image": "/path/to/image.png",     // <String>: Optional - image to show on the board.
+      "colour": "#bada55"                // <String>: Optional - specify a colour to make the message stand out.
+    }
+
+
 Testing locally
 ---------------
 
