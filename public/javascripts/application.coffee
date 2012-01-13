@@ -9,7 +9,7 @@ $ () ->
       timestamp = $elem.data 'timestamp'
       $elem.text moment(timestamp).fromNow()
 
-  window.setInterval setDates, 60e3
+  window.setInterval setDates, 30e3
 
   App.socket.on 'connect', ->
     App.Health().init()
