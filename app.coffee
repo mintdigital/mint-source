@@ -113,6 +113,7 @@ app.get('/', basicAuth, (req, res) ->
     for reply in replies
       reply = JSON.parse(reply)
       reply.project = helpers.discretify(reply.project, settings.discretionList)
+      reply.relTime = moment(reply.timestamp).fromNow()
       messages.push(reply)
 
     async.sortBy(messages, (message, callback) ->
