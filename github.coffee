@@ -21,10 +21,11 @@ class Github extends events.EventEmitter
 
   build: () ->
     project = helpers.discretify(@payload.repository.name, settings.discretionList)
+    branch = @payload.ref.replace('refs/heads/', '')
     for commit in @payload.commits
       data =
-        message:    commit.message
-        submessage: "#{project} - #{commit.author.name}"
+        message:    commit.message.split("\n")[0]
+        submessage: "#{project}/#{branch} - #{commit.author.name}"
         timestamp:  commit.timestamp
         image:      gravatar.url(commit.author.email, {s:120})
         relTime:    moment(commit.timestamp).fromNow()
