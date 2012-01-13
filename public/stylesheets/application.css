@@ -114,6 +114,7 @@ div.commit blockquote {
 }
 div.commit blockquote img{
   float:left;
+  max-width:120px;
   margin-right:2em;
 }
 div.commit blockquote p {
