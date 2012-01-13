@@ -1,5 +1,8 @@
 <div class="commit">
-  <blockquote class="message">
+  <blockquote class="message"
+  {{if message.colour}}
+    style="border-bottom:10px solid ${message.colour};"
+  {{/if}}>
     {{if message.image}}<img src="${message.image}" />{{/if}}
     <p>${message.message}</p>
     <footer>

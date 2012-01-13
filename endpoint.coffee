@@ -4,7 +4,8 @@
 #   "message": "Message body",         // <String>: Required - the main text to be displayed.
 #   "submessage": "submessage",        // <String>: Required - small lower message
 #   "timestamp": "2012-01-01T00:00:00",// <String>: Optional - will use the time the post was recieved if not specified. Expects a UTC string.
-#   "image": "/path/to/image.png"      // <String>: Optional - image to show on the board.
+#   "image": "/path/to/image.png",     // <String>: Optional - image to show on the board.
+#   "colour": "#bada55"                // <String>: Optional - specify a colour to make the message stand out.
 # }
 
 events   = require('events')
