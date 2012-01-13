@@ -1,11 +1,11 @@
 <div class="commit">
   <blockquote class="message">
-    {{if image}}<img src="${image}" />{{/if}}
-    <p>${message}</p>
+    {{if message.image}}<img src="${message.image}" />{{/if}}
+    <p>${message.message}</p>
     <footer>
       <p>
-        ${submessage}
-        <span class="time">${relTime}</span>
+        ${message.submessage}
+        <span class="time">${message.relTime}</span>
       </p>
     </footer>
   </blockquote>
