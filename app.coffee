@@ -163,7 +163,7 @@ app.post('/jenkins_pbh', ipWhitelist, (req, res) ->
     res.end('OK')
 )
 
-app.post '/endpoint', (req,res) ->
+app.post '/endpoint', basicAuth, (req,res) ->
   # Generic endpoint, send JSON here, show it on the status board
   body = ''
   req.on 'data', (data) -> body += data
