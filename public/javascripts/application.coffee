@@ -18,6 +18,14 @@ $ () ->
       $('#wrapper').prepend(commit)
       $('#wrapper .commit:gt(9)').remove()
 
+    App.socket.on 'disconnect', () ->
+      # Attempt to reconnect after 5 minutes if the connection dies (e.g. on deploy)
+      reconnect = () ->
+        if !App.socket.socket.open
+          App.socket = io.connect window.location.origin
+
+      window.setTimeout reconnect, 300e3 # 5 min
+
     if App.songsEnabled
       App.Songs.init()
 
