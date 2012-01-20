@@ -96,7 +96,7 @@ app.get '/', basicAuth, (req, res) ->
   gotMessages = false
   gotStatuses = false
 
-  getMessages = (callback)->
+  getMessages = ->
     redis.lrange 'Messages', 0, 5, (err, replies) ->
       for reply in replies
         reply = JSON.parse(reply)
