@@ -90,40 +90,54 @@ app.get('/javascripts/:resource.js', (req, res) ->
     res.contentType('application/javascript').send(compiled)
 )
 
-app.get('/', basicAuth, (req, res) ->
+app.get '/', basicAuth, (req, res) ->
   messages = []
   statuses = []
+  gotMessages = false
+  gotStatuses = false
+
+  getMessages = (callback)->
+    redis.lrange 'Messages', 0, 5, (err, replies) ->
+      for reply in replies
+        reply = JSON.parse(reply)
+        reply.project = helpers.discretify(reply.project, settings.discretionList)
+        reply.relTime = moment(reply.timestamp).fromNow()
+        messages.push(reply)
+
+      async.sortBy messages, (message, callback) ->
+        callback(null, 1 / Date.parse(message.timestamp))
+      ,(err, results) ->
+        messages = results
+        gotMessages = true
+        app.emit 'gotMessages'
+
   getStatuses = ->
-    redis.hgetall('Jenkins', (err, replies) ->
+    redis.hgetall 'Jenkins', (err, replies) ->
       for project, status of replies
         project = helpers.discretify(project, settings.discretionList)
         if status != 'SUCCESS'
           statuses.push({project: project, status: status})
-      res.header('Cache-Control', 'no-cache')
-      console.log(messages)
-      res.render('index', {
-        title: 'Mint Source',
-        messages: messages,
-        statuses: statuses,
-        songsEnabled: settings.lastfm.enabled
-      })
-    )
-  app.emit 'pageload'
-  redis.lrange('Messages', 0, 5, (err, replies) ->
-    for reply in replies
-      reply = JSON.parse(reply)
-      reply.project = helpers.discretify(reply.project, settings.discretionList)
-      reply.relTime = moment(reply.timestamp).fromNow()
-      messages.push(reply)
+      gotStatuses = true
+      app.emit 'gotStatuses'
 
-    async.sortBy(messages, (message, callback) ->
-      callback(null, 1 / Date.parse(message.timestamp))
-    ,(err, results) ->
-      messages = results
-      getStatuses()
-    )
-  )
-)
+  render = ->
+    app.emit 'pageload'
+    res.render 'index', {
+      title: 'Mint Source',
+      messages: messages,
+      statuses: statuses,
+      songsEnabled: settings.lastfm.enabled
+    }
+
+  getMessages()
+  getStatuses()
+
+  # Render once we have messages and statuses back
+  app.once 'gotStatuses', ->
+    render() if gotMessages
+  app.once 'gotMessages', ->
+    render() if gotStatuses
+
 
 app.post('/github_prh', basicAuth, (req, res) ->
   # GitHub post recieve hook
