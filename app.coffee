@@ -147,7 +147,7 @@ app.post('/github_prh', basicAuth, (req, res) ->
   req.on('data', (data) -> body += data )
   req.on('end', () ->
     g = new Github(body, redis)
-    g.on('message', (data) -> io.sockets.emit('message', data))
+    g.once('message', (data) -> io.sockets.emit('message', data))
     res.writeHead(200, {'Content-Type': 'text/html'})
     res.end('OK')
   )
