@@ -23,6 +23,11 @@ $ () ->
 
   window.setInterval setDates, 30e3
 
+  # Socket.io seems to loose its connection occasionally and doesn't recover
+  # Refresh the page every 12 hours as a hacky way around this
+  reloadPage = -> window.location.reload()
+  window.setTimeout reloadPage, 432e5
+
   App.socket.on 'connect', ->
     App.Health().init()
     App.Songs.init() if App.songsEnabled
