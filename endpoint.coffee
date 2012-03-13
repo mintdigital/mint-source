@@ -22,6 +22,7 @@ class EndPoint extends events.EventEmitter
   build: ->
     @data.timestamp = @data.timestamp || new Date().getTime()
     @data.relTime = moment(@data.timestamp).fromNow()
+    @data.colour = @data.colour || @data.color || undefined
     @updateRedis()
     @render()
 
